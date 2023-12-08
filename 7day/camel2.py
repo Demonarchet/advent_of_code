@@ -7,41 +7,88 @@ hands = []
 ranks = []
 
 def count_pair(hand):
+    jcount = 0
     count = 0
     for card in hand:
-        if hand[card] == 2:
-            count += 1
+        if card == 'J':
+            jcount = hand[card]
+        else:
+            if hand[card] == 2:
+                count += 1
+    # More than a pair
+    if jcount > 1:
+        return 2
+    if jcount == 1:
+        # More than a pair
+        if count >= 1:
+            return 2
+        # Only one pair
+        else:
+            return 1
+    # Only pairs
     return count
 
 def check_five(hand):
+    if len(hand) > 2:
+        return 0
+    if len(hand) == 2:
+        for card in hand:
+            if card == 'J':
+                return 1
     if len(hand) == 1:
         return 1
     return 0
 
 def check_four(hand):
-    if len(hand) != 2:
+    if len(hand) > 3:
         return 0
+    jcount = 0
+    # Count Jokers
     for card in hand:
+        if card == 'J':
+            jcount = hand[card]
+    for card in hand:
+        if card != 'J' and hand[card] == (4 - jcount):
+            return 1
         if hand[card] == 4:
             return 1
     return 0
 
 def check_full(hand):
-    if len(hand) != 2:
+    if len(hand) > 3:
         return 0
-    nb = 5
+    
+    jcount = 0
+    # Count Jokers
     for card in hand:
-        nb -= hand[card]
-        if nb == 2 or nb == 3:
+        if card == 'J':
+            jcount = hand[card]
+
+    if jcount == 0 and len(hand) != 2:
+        return 0
+    
+    nb = 0
+    for card in hand:
+        if card != 'J':
+            nb += hand[card]
+        if nb == 2 or nb == 3 or nb == (2-jcount) or nb == (3-jcount):
             return 1
     return 0
 
 def check_three(hand):
-    if len(hand) != 3:
+    if len(hand) > 4:
         return 0
+    
+    jcount = 0
+    # Count Jokers
     for card in hand:
-        if hand[card] == 3:
+        if card == 'J':
+            jcount = hand[card]
+
+    for card in hand:
+        if hand[card] == 3 or hand[card] == (3-jcount):
             return 1
+        
     return 0
 
 def add_cart_in_hand(cards):
@@ -69,13 +116,12 @@ def get_type(hand):
     return "nothing"
 
 def check_hand_value(hand):
-    pw = 12
+    pw = 14
     value = 0
     for card in hand:
         value += 10**pw * cards.index(card)
         pw -= 2
     return value
-    
 
 def give_final_rank(ranks, hands):
     final_rank = []
@@ -98,10 +144,17 @@ if __name__ == "__main__":
             bid = line[1]
             hand = add_cart_in_hand(hd)
             hands.append((hd, hand, bid))
+
         for hand in hands:
             ranks.append(get_type(hand[1]))
         ranks = give_final_rank(ranks, hands)
-        result = 0
+
+        print(ranks)
         for i in range(len(ranks)):
-            result += (i+1) * int(hands[ranks[i]][2])
-        print(result)
+            print(hands[ranks[i]][0])
+
+
+        # result = 0
+        # for i in range(len(ranks)):
+        #     result += (i+1) * int(hands[ranks[i]][2])
+        # print(result)

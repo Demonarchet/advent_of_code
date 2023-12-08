@@ -28,14 +28,14 @@ def concatenate_ranges(ranges):
             concatenated.append((start, end))
     return concatenated
 
-# def get_all_values(ranges):
-#     values = []
-#     for range in ranges:
-#         print(range)
-#         r = np.arange(int(range[0]), int(range[1]))
-#         r = np.char.mod('%d', r)
-#         values.append(r)
-#     return values
+def get_all_values(ranges):
+    values = []
+    for range in ranges:
+        print(range)
+        r = np.arange(int(range[0]), int(range[1]))
+        r = np.char.mod('%d', r)
+        values.append(r)
+    return values
 
 def seeds(line):
     return line.split(":")[1].split()
@@ -61,21 +61,23 @@ if __name__ == "__main__":
         ranges = seeds(lines[0])
         ranges = get_all_ranges(ranges)
         values = concatenate_ranges(ranges)
-        # values = get_all_values(values)
+        values = get_all_values(values)
+
+        values = np.concatenate(values)
 
         print(values)
 
-        # updated = [False] * len(values)
+        updated = [False] * len(values)
 
-        # for line in lines[1:]:
-        #     nb_elem = len(line.split())
-        #     if nb_elem != 3:
-        #         updated = [False] * len(values)
-        #         continue
-        #     for idx, v in enumerate(values):
-        #         if updated[idx]:
-        #             continue
-        #         values[idx], updated[idx] = get_new_value(v, line)
+        for line in lines[1:]:
+            nb_elem = len(line.split())
+            if nb_elem != 3:
+                updated = [False] * len(values)
+                continue
+            for idx, v in enumerate(values):
+                if updated[idx]:
+                    continue
+                values[idx], updated[idx] = get_new_value(v, line)
     
-        # values = np.array(values, dtype=np.int64)
-        # print(np.min(values))
+        values = np.array(values, dtype=np.int64)
+        print(np.min(values))
