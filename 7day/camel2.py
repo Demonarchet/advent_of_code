@@ -1,6 +1,6 @@
 import numpy as np
 
-cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'T', 'J','Q', 'K', 'A']
+cards = ['J', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'T', 'Q', 'K', 'A']
 types = ["nothing", "pair", "2pair", "three", "full", "four", "five"]
 
 hands = []
@@ -149,12 +149,7 @@ if __name__ == "__main__":
             ranks.append(get_type(hand[1]))
         ranks = give_final_rank(ranks, hands)
 
-        print(ranks)
+        result = 0
         for i in range(len(ranks)):
-            print(hands[ranks[i]][0])
-
-
-        # result = 0
-        # for i in range(len(ranks)):
-        #     result += (i+1) * int(hands[ranks[i]][2])
-        # print(result)
+            result += (i+1) * int(hands[ranks[i]][2])
+        print(result)
